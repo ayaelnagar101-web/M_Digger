@@ -1,0 +1,27 @@
+web-recon-tool/
+├── main.py
+├── config.py
+├── requirements.txt
+├── .env.example
+├── modules/
+│   ├── __init__.py
+│   ├── stealth_requester.py
+│   ├── api_manager.py
+│   ├── shodan_module.py
+│   ├── virustotal_module.py
+│   ├── censys_module.py
+│   ├── hunter_module.py
+│   ├── securitytrails_module.py
+│   ├── ssl_analyzer.py
+│   ├── port_scanner.py
+│   ├── dir_fuzzer.py
+│   ├── banner_grabber.py
+│   ├── subdomain_enum.py
+│   └── report_generator.py
+├── wordlists/
+│   └── common.txt
+├── reports/
+└── utils/
+    ├── __init__.py
+    ├── risk_engine.py
+    └── correlation_engine.py
