@@ -1,0 +1,22 @@
+# Clone/Setup
+cd ~/web-recon-tool
+
+# Create virtual environment
+python3 -m venv recon_env
+source recon_env/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Copy and configure environment
+cp .env.example .env
+nano .env  # Add your API keys
+
+# Run passive recon only (safe, no direct contact)
+python3 main.py example.com --mode passive
+
+# Run with stealth mode for WAF evasion
+python3 main.py example.com --mode full --stealth
+
+# Full VAPT scan with verification
+python3 main.py target.com --mode full --stealth
