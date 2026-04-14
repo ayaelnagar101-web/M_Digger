@@ -1,4 +1,5 @@
 # Clone/Setup
+git clone https://github.com/ayaelnagar101-web/M_Digger.git
 cd ~/web-recon-tool
 
 # Create virtual environment
