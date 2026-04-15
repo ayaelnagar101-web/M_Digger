@@ -20,7 +20,7 @@ init(autoreset=True)
 sys.path.insert(0, str(Path(__file__).parent))
 
 from config import Config
-from modules.stealth_requester import StealthRequester, WAFDetector
+from modules.stealth_requester import StealthRequester
 from modules.api_manager import APIManager
 from modules.ssl_analyzer import SSLAnalyzer
 from modules.port_scanner import PortScanner
@@ -30,6 +30,7 @@ from modules.subdomain_enum import SubdomainEnumerator
 from modules.report_generator import ReportGenerator
 from utils.risk_engine import RiskEngine
 from utils.correlation_engine import CorrelationEngine
+from modules.waf_detector import WAFDetector
 
 def print_banner():
     """Display tool banner"""
@@ -112,15 +113,23 @@ def main():
         "verified": [],
         "risk_assessment": {}
     }
-    
+
     # WAF Detection (if stealth mode)
-    if args.stealth and Config.WAF_DETECTION:
-        print(f"\n{Fore.YELLOW}{Style.BRIGHT}[WAF Detection]{Style.RESET_ALL}")
-        waf_detected = WAFDetector.detect(f"https://{args.target}")
-        findings["waf_detected"] = waf_detected
-        
-        if waf_detected:
-            print(f"  {Fore.YELLOW}[!] Adjusting strategy for WAF evasion...{Style.RESET_ALL}")
+if args.stealth and Config.WAF_DETECTION:
+    print(f"\n{Fore.YELLOW}{Style.BRIGHT}[WAF Detection]{Style.RESET_ALL}")
+    
+    # Use the new wafw00f-based detector
+    waf_detector = WAFDetector(args.target)
+    waf_detected = waf_detector.detect()
+    findings["waf_detected"] = waf_detected
+    
+    if waf_detected:
+        print(f"\n  {Fore.YELLOW}[!] Recommended evasion strategies:{Style.RESET_ALL}")
+        strategies = waf_detector.get_evasion_strategy()
+        for strategy in strategies:
+            print(f"      - {strategy}")
+        findings["waf_evasion_strategies"] = strategies
+    
     
     # ===== PHASE 1: PASSIVE INTELLIGENCE (API-Based) =====
     if args.mode in ["passive", "full"]:
